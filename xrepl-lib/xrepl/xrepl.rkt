@@ -1632,8 +1632,10 @@
              (not input-mode))
          (or (current-interaction-info)
              (default-current-read-interaction?))
-         (with-handlers ([exn? (λ (_) #f)])
-           (collection-file-path "main.rkt" "expeditor"))
+         (or
+          (with-handlers ([exn? (λ (_) #f)])
+            (collection-file-path "main.rkt" "expeditor"))
+          (eq? (object-name (current-module-name-resolver)) 'embedded-resolver))
          (dynamic-require 'expeditor 'expeditor-open (lambda () #f))))
   (define RL ; no direct dependency on readline
     (and (or (eq? input-mode 'readline)
